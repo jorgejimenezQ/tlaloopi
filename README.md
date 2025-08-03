@@ -2,6 +2,10 @@
 
 A robust game loop implementation with fixed timestep updates and variable rendering for JavaScript games and animations.
 
+<p align="center">
+  <img src="./tlaloopi-hand-drawn.png" width="700" alt="Tlacuilolli Logo"/>
+</p>
+
 ## Features
 
 - Fixed timestep updates with variable rendering
@@ -27,7 +31,7 @@ const Loop = require('@tenoch_code/tlaloopi');
 const gameLoop = Loop({
   maxFPS: 60,      // Maximum frames per second (0 for uncapped)
   timestep: 1000/60 // Duration of each physics update in ms (16.67ms ≈ 60fps)
-}, 
+},
 // Update function (runs at fixed timestep)
 function update(deltaTime) {
   // Update game state here
@@ -69,18 +73,22 @@ gameLoop.destroy();
 Creates a new game loop instance.
 
 - `config` (Object): Configuration options
+
   - `maxFPS` (Number): Maximum frames per second (default: 60, 0 for uncapped)
   - `timestep` (Number): Duration of each physics update in ms (default: 16.67 ≈ 60fps)
   - `limit` (Number): Maximum number of updates per frame (default: 300)
   - `fps` (Number): Initial FPS value (default: 60)
 
 - `update(deltaTime)` (Function): Called for each fixed timestep update
+
   - `deltaTime` (Number): Time since last update in seconds
 
 - `render(interpolation)` (Function): Called for each frame render
+
   - `interpolation` (Number): Interpolation factor between updates (0 to 1)
 
 - `onFrameStart(timestamp, delta)` (Function, optional): Called at the start of each frame
+
   - `timestamp` (Number): Current timestamp in ms
   - `delta` (Number): Time since last frame in ms
 
