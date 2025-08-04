@@ -13,7 +13,6 @@ A robust game loop implementation with fixed timestep updates and variable rende
 - Prevents spiral of death with update limiting
 - Smooth FPS calculation
 - Clean API with method chaining
-- Works in both browser and Node.js environments
 
 ## Installation
 
@@ -24,8 +23,7 @@ npm install @tenoch_code/tlaloopi
 ## Usage
 
 ```javascript
-const Loop = require('@tenoch_code/tlaloopi');
-// or import Loop from '@tenoch_code/tlaloopi';
+import Loop from '@tenoch_code/tlaloopi';
 
 // Create a new game loop
 const gameLoop = Loop({
