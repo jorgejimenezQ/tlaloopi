@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@tenoch_code/tlaloopi - CDN Test</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        #info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        button {
+            cursor: pointer;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4285f4;
+            color: white;
+            transition: background-color 0.2s ease-in-out;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #3367d6;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <div>FPS: <span id="fps">0</span></div>
+        <div>Counter: <span id="counter">0</span></div>
+        <button id="pauseBtn">Pause</button>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Load from CDN -->
+    <script src="https://unpkg.com/@tenoch_code/tlaloopi@1.0.2/dist/index.umd.js"></script>
+    
+    <script>
+        // Get the Loop constructor from the CDN
+        const Loop = window.TlaloopiLoop.default;
+
+        // Game state
+        let counter = 0;
+        let displayCounter = 0;
+
+        // Setup canvas
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Create game loop
+        const gameLoop = Loop(
+            {
+                maxFPS: 60,
+                timestep: 1000/60
+            },
+            // Update function
+            function(deltaTime) {
+                counter++;
+                this.x = (this.x || 0) + 100 * deltaTime;
+                if (this.x > canvas.width) this.x = -50;
+                displayCounter = counter;
+            },
+            // Render function
+            function(interpolation) {
+                // Clear canvas
+                ctx.fillStyle = '#f0f0f0';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Update info
+                document.getElementById('fps').textContent = Math.round(this.fps);
+                document.getElementById('counter').textContent = displayCounter;
+                
+                // Draw moving square
+                const x = this.x || 0;
+                const nextX = x + 100 * (this.config.timestep / 1000);
+                const renderX = x + (nextX - x) * interpolation;
+                
+                ctx.fillStyle = '#4285f4';
+                ctx.fillRect(renderX, canvas.height / 2 - 25, 50, 50);
+            }
+        );
+
+        // Start the loop
+        gameLoop.start();
+
+        // Pause/Resume button
+        const pauseBtn = document.getElementById('pauseBtn');
+        pauseBtn.addEventListener('click', () => {
+            if (gameLoop.running) {
+                gameLoop.stop();
+                pauseBtn.textContent = 'Resume';
+            } else {
+                gameLoop.start();
+                pauseBtn.textContent = 'Pause';
+            }
+        });
+
+        console.log('CDN test running. Loop version:', window.TlaloopiLoop.VERSION);
+    </script>
+</body>
+</html>
